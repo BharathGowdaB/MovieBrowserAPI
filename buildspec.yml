@@ -1,0 +1,18 @@
+version: 0.2
+
+env:
+  variables:
+    STAGE: production
+
+phases:
+  install:
+    runtime-version:
+      nodejs: 20
+    commands:
+      - npm install serverless -g
+
+      - npm install
+
+      # - serverless create_domain
+
+      - serverless deploy

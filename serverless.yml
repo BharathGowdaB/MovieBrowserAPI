@@ -15,5 +15,7 @@ functions:
   MovieBrowserAPI:
     handler: index.postHandler
     events:
-    - http: ANY /
-    - http: 'ANY {proxy+}'
+      path: /
+      method: get
+      cors: true
+      private: false
