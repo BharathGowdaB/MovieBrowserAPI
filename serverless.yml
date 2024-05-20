@@ -9,7 +9,7 @@ provider:
   region: ap-south-2
   memorySize: 126
   timeout: 30
-  stage: npr
+  stage: prd
 
 functions:
   MovieBrowserAPI:
