@@ -9,8 +9,13 @@ phases:
     runtime-version:
       nodejs: 20
     commands:
-      - npm install serverless -g
+      - npm install -g serverless
       - npm install
+
+  # pre_build:
+  #   commands:
+  #     - npm run test
   build:
     commands:
+      - npm run build
       - serverless deploy
