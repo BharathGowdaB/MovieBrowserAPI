@@ -2,6 +2,7 @@ service: MovieBrowserAPI
 
 plugins:
   - serverless-offline
+  - serverless-webpack
 
 provider:
   name: aws
@@ -17,10 +18,10 @@ provider:
 
 functions:
   MovieBrowserAPI:
-    handler: index.postHandler
+    handler: dist/index.handler
     events:
-      - http:
-          path: /
+      - httpApi:
+          path: /movie/popular
           method: get
 
 custom:
