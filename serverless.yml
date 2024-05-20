@@ -8,10 +8,12 @@ provider:
   runtime: nodejs20.x
   region: ap-south-1
   memorySize: 128
-  timeout: 30
+  timeout: 29
   stage: prd
   deploymentBucket: movie-browser-api
   endpointType: REGIONAL
+  httpApi:
+    cors: true
 
 functions:
   MovieBrowserAPI:
@@ -20,5 +22,13 @@ functions:
       - http:
           path: /
           method: get
-          cors: true
-          private: false
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: 'npm' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+
+package:
+  individually: true
