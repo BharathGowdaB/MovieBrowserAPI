@@ -1,0 +1,19 @@
+service: MovieBrowserAPI
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-south-2
+  memorySize: 126
+  timeout: 30
+  stage: npr
+
+functions:
+  MovieBrowserAPI:
+    handler: index.postHandler
+    events:
+    - http: ANY /
+    - http: 'ANY {proxy+}'
