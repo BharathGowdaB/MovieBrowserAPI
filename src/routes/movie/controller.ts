@@ -2,7 +2,7 @@
 const controller = {
     getPopularMovies: async (req, res) => {
         try {
-            console.log("popular")
+            console.log("popular 33")
             res.send("popular list");
         } catch (error) {
             console.log(JSON.stringify(error));
@@ -11,4 +11,4 @@ const controller = {
     }
 }
 
-module.exports = controller;
+export { controller };

@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ES2020"
+        ],
+        "module": "CommonJS",
+        "esModuleInterop": true,
+        "target": "ES6",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "outDir": "dist",
+        "sourceMap": true,
+        "removeComments": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

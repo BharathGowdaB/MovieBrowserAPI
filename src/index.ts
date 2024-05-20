@@ -1,10 +1,5 @@
-const serverlessHttp = require('serverless-http');
-const express = require('express');
-const routes = require('./routes/route');
-
-const app = express();
-app.use(express.json());
-app.use('/', routes);
+import serverlessHttp from 'serverless-http';
+import app from './app';
 
 // Use the serverless-http middleware
 const handler = serverlessHttp(app);

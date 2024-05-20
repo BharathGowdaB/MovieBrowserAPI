@@ -16,7 +16,7 @@ provider:
 
 functions:
   MovieBrowserAPI:
-    handler: index.handler
+    handler: dist/index.handler
     events:
       - httpApi:
           path: /movie/popular
