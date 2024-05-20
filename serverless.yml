@@ -7,7 +7,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: ap-south-2
-  memorySize: 126
+  memorySize: 128
   timeout: 30
   stage: prd
 
@@ -15,7 +15,8 @@ functions:
   MovieBrowserAPI:
     handler: index.postHandler
     events:
-      path: /
-      method: get
-      cors: true
-      private: false
+      - http:
+          path: /
+          method: get
+          cors: true
+          private: false
