@@ -10,9 +10,7 @@ phases:
       nodejs: 20
     commands:
       - npm install serverless -g
-
       - npm install
-
-      # - serverless create_domain
-
+  build:
+    commands:
       - serverless deploy
