@@ -6,10 +6,12 @@ plugins:
 provider:
   name: aws
   runtime: nodejs20.x
-  region: ap-south-2
+  region: ap-south-1
   memorySize: 128
   timeout: 30
   stage: prd
+  deploymentBucket: movie-browser-api
+  endpointType: REGIONAL
 
 functions:
   MovieBrowserAPI:
