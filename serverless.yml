@@ -2,6 +2,7 @@ service: MovieBrowserAPI
 
 plugins:
   - serverless-offline
+  - serverless-webpack
 
 provider:
   name: aws
@@ -15,10 +16,20 @@ provider:
 
 functions:
   MovieBrowserAPI:
-    handler: index.postHandler
+    handler: index.handler
     events:
-      - http:
-          path: /
+      - httpApi:
+          path: /movie/popular
           method: get
           cors: true
           private: false
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: 'npm' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+
+package:
+  individually: true

@@ -1,24 +1,16 @@
-const awsServerlessExpress = require('aws-serverless-express');
+const serverlessHttp = require('serverless-http');
 const express = require('express');
+const routes = require('./routes/route');
+
 const app = express();
-
 app.use(express.json());
+app.use('/', routes);
 
-app.get('/', (req, res) => {
-    try {
-        console.log("Starting");
-        res.status(200).send("API running");
-        console.log("Completed");
-    } catch (err) {
-        console.log("Error", err);
-        res.status(500).send("Internal Server Error");
-    }
-});
+// Use the serverless-http middleware
+const handler = serverlessHttp(app);
 
-const server = awsServerlessExpress.createServer(app);
-
-// Correctly export the handler
-module.exports.postHandler = (event, context) => {
-    console.log("Inside POST Method");
-    awsServerlessExpress.proxy(server, event, context);
+// Export the handler for Lambda
+module.exports.handler = async (event, context) => {
+    const result = await handler(event, context);
+    return result;
 };

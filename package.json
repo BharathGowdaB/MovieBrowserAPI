@@ -10,9 +10,12 @@
   "author": "Bharath Gowda B",
   "license": "ISC",
   "dependencies": {
-    "aws-serverless-express": "^3.4.0",
     "express": "^4.19.2",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
     "serverless": "^3.38.0",
-    "serverless-offline": "^13.5.0"
+    "serverless-offline": "^13.5.0",
+    "serverless-webpack": "^5.14.0"
   }
 }
