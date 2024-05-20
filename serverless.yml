@@ -13,8 +13,6 @@ provider:
   deploymentBucket: movie-browser-api
   endpointType: REGIONAL
 
-
-
 functions:
   MovieBrowserAPI:
     handler: index.postHandler
