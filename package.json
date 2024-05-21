@@ -6,15 +6,18 @@
   "scripts": {
     "test": "",
     "build": "tsc",
-    "offline": "serverless offline"
+    "offline": "nodemon --watch '*/**.ts' -e ts --exec \"tsc && serverless offline\""
   },
   "author": "Bharath Gowda B",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.0",
+    "date-format": "^4.0.14",
     "express": "^4.19.2",
     "serverless-http": "^3.2.0"
   },
   "devDependencies": {
+    "nodemon": "^3.1.0",
     "serverless": "^3.38.0",
     "serverless-offline": "^13.5.0",
     "serverless-webpack": "^5.14.0",
