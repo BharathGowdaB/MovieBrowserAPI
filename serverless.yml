@@ -21,7 +21,19 @@ functions:
     handler: dist/index.handler
     events:
       - httpApi:
+          path: /movie/id/{movieId}
+          method: get
+      - httpApi:
           path: /movie/popular
+          method: get
+      - httpApi:
+          path: /movie/upcoming
+          method: get
+      - httpApi:
+          path: /movie/top-rated
+          method: get
+      - httpApi:
+          path: /movie/newly-added
           method: get
 
 custom:
