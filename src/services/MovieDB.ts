@@ -122,6 +122,13 @@ const MovieDB = {
         const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery;
         return await MovieDB.getMovieList(url, page, offset, count);
     },
+
+    searchMovie: async (query: string, page: number, offset: number, count: number) => {
+        const queryParam = `&query=${query}`;
+
+        const url = MovieDB.BASEURL + "search/movie?" + MovieDB.APIKEY + queryParam;
+        return await MovieDB.getMovieList(url, page, offset, count);
+    }
 }
 
 export default MovieDB;

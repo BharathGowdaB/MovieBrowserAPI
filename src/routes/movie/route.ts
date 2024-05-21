@@ -7,5 +7,6 @@ router.route('/popular').get(controller.getPopularMovies);
 router.route('/upcoming').get(controller.getUpcomingMovies);
 router.route('/top-rated').get(controller.getTopRatedMovies);
 router.route('/newly-added').get(controller.getNewlyAddedMovies);
+router.route('/search').get(controller.searchMovies);
 
 export default router;

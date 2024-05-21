@@ -2,7 +2,7 @@ import format from 'date-format';
 import constants from '../utils/constants';
 import Trailer from './trailer';
 
-class Movie {
+class Tvshow {
     id: string;
     imdbId: string;
     collectionId: string;
@@ -31,7 +31,7 @@ class Movie {
         this.title = data.title;
         this.language = data.original_language;
         this.overview = data.overview;
-        this.releaseDate = data.release_date || "";
+        this.releaseDate = data.release_date;
         this.voteCount = data.vote_count;
         this.voteAverage = data.vote_average;
         this.rating = this.voteAverage / 2;
@@ -59,4 +59,4 @@ class Movie {
     }
 }
 
-export default Movie;
+export default Tvshow;
