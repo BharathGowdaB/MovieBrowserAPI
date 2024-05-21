@@ -6,7 +6,8 @@
   "scripts": {
     "test": "",
     "build": "tsc",
-    "offline": "nodemon --watch '*/**.ts' -e ts --exec \"tsc && serverless offline\""
+    "nodemon": "nodemon --watch '*/**.ts' -e ts --exec \"tsc && serverless offline\"",
+    "offline": "tsc && serverless offline"
   },
   "author": "Bharath Gowda B",
   "license": "ISC",
