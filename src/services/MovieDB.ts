@@ -102,7 +102,6 @@ const MovieDB = {
         const certificationQuery = new Certification().getInstance().getCertificationQuery(certification);
 
         const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery;
-        console.log(105, url)
         return await MovieDB.getMovieList(url, page, offset, count);
     },
 
