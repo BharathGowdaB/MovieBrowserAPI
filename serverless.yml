@@ -35,6 +35,10 @@ functions:
       - httpApi:
           path: /movie/newly-added
           method: get
+      - httpApi:
+          path: /movie/search
+          method: get
+
 
 custom:
   webpack:

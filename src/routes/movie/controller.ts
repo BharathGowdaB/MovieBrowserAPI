@@ -56,6 +56,16 @@ const controller = {
             res.status(500).send("Internal Server Error");
         }
     },
+    searchMovies: async (req, res) => {
+        try {
+            const { query, page, offset, count } = req.query;
+            const response = await MovieDB.searchMovie(query, page, offset, count);
+            res.send(response);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Internal Server Error");
+        }
+    },
 }
 
 export { controller };

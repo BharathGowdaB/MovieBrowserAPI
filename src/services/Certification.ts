@@ -39,8 +39,9 @@ class Certification {
         return this.certification;
     }
 
-    getCertificationQuery = (certification: CertificationType) => {
-        return`&region=${this.certificationRegion}&certification_country=${this.certificationRegion}&certification.gte=${this.certificationMap[certification]}`;
+    getCertificationQuery = (certification: CertificationType, isMovie: boolean = true) => {
+        const cert = this.certificationMap[certification];
+        return`&region=${this.certificationRegion}&certification_country=${this.certificationRegion}&certification.gte=${isMovie ? cert.movie : cert.tvshow}`;
     }
 }
 
