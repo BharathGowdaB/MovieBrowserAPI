@@ -38,6 +38,24 @@ functions:
       - httpApi:
           path: /movie/search
           method: get
+      - httpApi:
+          path: /tvshow/id/{tvshowId}
+          method: get
+      - httpApi:
+          path: /tvshow/popular
+          method: get
+      - httpApi:
+          path: /tvshow/upcoming
+          method: get
+      - httpApi:
+          path: /tvshow/top-rated
+          method: get
+      - httpApi:
+          path: /tvshow/newly-added
+          method: get
+      - httpApi:
+          path: /tvshow/search
+          method: get
 
 
 custom:
