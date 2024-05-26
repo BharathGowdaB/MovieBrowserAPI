@@ -19,6 +19,7 @@ const MovieDB = {
         } catch(error){
             if(error?.response?.status === 404){
                 throw {
+                    id,
                     status: 404,
                     statusText: 'Not Found'
                 };
@@ -79,7 +80,7 @@ const MovieDB = {
         const queryParam = `&sort_by=popularity.desc&vote_count.gte=10&vote_average.lte=10&primary_release_date.lte=${date}${constants.LANGUAGE}`;
         const certificationQuery = Certification.getCertificationQuery(certification, true);
 
-        const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery;
+        const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery + "&";
         return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
     },
 
@@ -89,7 +90,7 @@ const MovieDB = {
         const queryParam = `&sort_by=popularity.desc&primary_release_date.gte=${startDate}&primary_release_date.lte=${endDate}${constants.LANGUAGE}`;
         const certificationQuery = Certification.getCertificationQuery(certification, true);
         
-        const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery;
+        const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery + "&";
         return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
     },
 
@@ -97,7 +98,7 @@ const MovieDB = {
         const queryParam = `&sort_by=vote_average.desc&vote_count.gte=200&vote_average.lte=10${constants.LANGUAGE}`;
         const certificationQuery = Certification.getCertificationQuery(certification, true);
         
-        const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery;
+        const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery + "&";
         return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
     },
 
@@ -105,7 +106,7 @@ const MovieDB = {
         const queryParam = `&query=${query}`;
         const certificationOrder = Certification.getCertificationOrder(certification);
 
-        const url = MovieDB.BASEURL + "search/movie?" + MovieDB.APIKEY + queryParam;
+        const url = MovieDB.BASEURL + "search/movie?" + MovieDB.APIKEY + queryParam + "&";
         return await Utils.getList(url, page, offset, count,  async (item) => {
             try{
                 const movieModel = await MovieDB.getMovieDetails(item?.id);

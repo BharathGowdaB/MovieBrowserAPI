@@ -1,59 +1,73 @@
 import axios from "axios";
 
 const utils = {
-    getList: async (url: string, curPage: number = 1, curOffset: number = 0, count: number = 20, callback = (x: any) => x) => {
+    getList: async (url: string, curPage: number = 1, curOffset: number = 0, count: number = 20, itemCallback = (x: any) => x) => {
         curPage = Number(curPage);
         curOffset = Number(curOffset);
         count = Number(count);
-        const maxPromiseLength = count * 6;
 
         const results = [];
         const promiseCallback = [];
-        const promisePagination = []
+
+        async function getData(){
+            const getDataPromise = [];
+            for(let i = curPage; i < curPage + 4; i++){
+                getDataPromise.push(axios.get(`${url}${i}`, { params : { page: i}}))
+            }
+            const dataRespArray = await Promise.all(getDataPromise);
+            const data = [];
+            dataRespArray.forEach((res, page) => {
+                const items = res.data?.result?.items || res?.data?.results;
+                items?.forEach((item, offset) => {
+                    if(offset >= curOffset){
+                        const nextOffset = offset + 1;
+                        data.push({
+                            nextOffset: nextOffset === items.length ? 0 : nextOffset,
+                            nextPage: nextOffset === items.length ? (curPage + page + 1) : (curPage + page),
+                            item
+                        })
+                    }
+                })
+                curOffset = 0;
+            });
+
+            return data;
+        }
 
         async function awaitCallbackPromise(){
-            const callbackResps = await Promise.all(promiseCallback);
+            const callbackResps = await Promise.all(promiseCallback.map(f => f()));
             for(let i = 0 ; i < callbackResps.length; i++){
-                if(callbackResps[i] && results.length < count){
-                    results.push(callbackResps[i]);
-                    console.log(promisePagination[i],results.length , count, results.length === count )
+                if(callbackResps[i] && callbackResps[i].model && results.length < count){
+                    results.push(callbackResps[i].model);
                     if(results.length === count){
-                        curOffset = promisePagination[i].nextOffset;
-                        curPage = promisePagination[i].nextPage;
+                        curOffset = callbackResps[i].nextOffset;
+                        curPage = callbackResps[i].nextPage;
                         break;
                     }
                 }
             }
             promiseCallback.splice(0, promiseCallback.length);
-            promisePagination.splice(0, promisePagination.length);
         }
 
         while(results.length < count) {
-            const res = await axios.get(`${url}&page=${curPage}`);
-            const items = res.data?.results;
-            if(!items?.length){
+            const data = await getData();
+            if(!data?.length){
                 break;
             } else {
-                while (curOffset < items.length){
-                    promiseCallback.push(callback(items[curOffset++]));
-                    promisePagination.push({ 
-                        nextOffset: curOffset === items.length ? 0 : curOffset,
-                        nextPage: curOffset === items.length ? curPage + 1 : curPage
-                    })
-                }
-                
-                if(curOffset >= items.length){
-                    curOffset = 0;
-                    curPage++;
-                }
-
-                if(promiseCallback.length > maxPromiseLength){
-                    await awaitCallbackPromise();
-                }
+                data.forEach((itemData) => {
+                    promiseCallback.push(async () => {
+                        const model = await itemCallback(itemData.item)
+                        return {
+                            ...itemData,
+                            model: model
+                        }
+                    });
+                })
+                curPage += 4;
+    
+                await awaitCallbackPromise();
             }
         }
-
-        if(promiseCallback.length) await awaitCallbackPromise();
 
        return {
             count: results.length,
