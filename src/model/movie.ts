@@ -1,3 +1,4 @@
+import Certification, { CertificationType } from '../services/Certification';
 import constants from '../utils/constants';
 import Trailer from './trailer';
 
@@ -21,6 +22,7 @@ class Movie {
     videos: Trailer[];
     hasTrailer: boolean;
     trailer: Trailer;
+    certification: CertificationType;
 
     constructor(data: any)  {
         this.id = data.id;
@@ -53,6 +55,15 @@ class Movie {
             this.hasTrailer = false;
             this.trailer = null;
         }
+
+        const release_dates = data?.release_dates?.results?.find(result => result.iso_3166_1 === Certification.certificationRegion)?.release_dates;
+        this.certification = release_dates?.reduce((curRating, rating) => {
+            const cert = Certification.reverseMapCertification(rating.certification, true);
+            if(Certification.getCertificationOrder(curRating) < Certification.getCertificationOrder(cert)){
+                curRating = cert;
+            }
+            return curRating;
+        }, "NR");
     }
 }
 

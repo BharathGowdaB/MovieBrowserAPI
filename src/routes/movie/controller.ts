@@ -47,8 +47,8 @@ const controller = {
 
     getNewlyAddedMovies: async (req, res) => {
         try {
-            const { page, offset, count } = req.query;
-            const response = await Vidsrc.getNewlyAddedMovies(page, offset, count);
+            const { page, offset, count, certification = "NR" } = req.query;
+            const response = await Vidsrc.getNewlyAddedMovies(certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
@@ -57,8 +57,8 @@ const controller = {
     },
     searchMovies: async (req, res) => {
         try {
-            const { query, page, offset, count } = req.query;
-            const response = await MovieDB.searchMovie(query, page, offset, count);
+            const { query, page, offset, count, certification = "NR" } = req.query;
+            const response = await MovieDB.searchMovie(query, certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);

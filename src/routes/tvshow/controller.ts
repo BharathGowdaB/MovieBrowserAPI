@@ -48,8 +48,8 @@ const controller = {
 
     getNewlyAddedTvshow: async (req, res) => {
         try {
-            const { page, offset, count } = req.query;
-            const response = await Vidsrc.getNewlyAddedTvshows(page, offset, count);
+            const { page, offset, count, certification = "NR" } = req.query;
+            const response = await Vidsrc.getNewlyAddedTvshows(certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
@@ -58,8 +58,8 @@ const controller = {
     },
     searchTvshow: async (req, res) => {
         try {
-            const { query, page, offset, count } = req.query;
-            const response = await TvshowDB.searchTvshow(query, page, offset, count);
+            const { query, page, offset, count, certification = "NR" } = req.query;
+            const response = await TvshowDB.searchTvshow(query, certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);

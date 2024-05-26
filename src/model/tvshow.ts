@@ -1,6 +1,7 @@
 import constants from '../utils/constants';
 import Season from './season';
 import Episode from './episode';
+import Certification, { CertificationType } from '../services/Certification';
 
 class Tvshow {
     id: string;
@@ -23,13 +24,14 @@ class Tvshow {
     nextEpisodeToAir: Episode;
     streamFirstEpisode: boolean;
     streamLastEpisode: boolean;
+    certification: CertificationType;
 
     constructor(data: any)  {
         this.id = data.id;
         this.title = data.name;
         this.language = data.original_language;
         this.overview = data.overview;
-        this.firstAirDate = data.first_air_date;
+        this.firstAirDate = data.first_air_date  || "";
         this.lastAirDate = data.last_air_date;
         this.voteCount = data.vote_count;
         this.voteAverage = data.vote_average;
@@ -37,7 +39,7 @@ class Tvshow {
         this.popularity = data.popularity;
         this.posterPath = constants.URL_IMAGE + data.poster_path;
         this.backdropPath = data.backdrop_path ? (constants.URL_IMAGE + data.backdrop_path) : null;
-        this.genres = data.geners;
+        this.genres = data.genres;
         this.tagline = data.tagline;
         this.seasons = data.seasons.map((season: object) => new Season(season)).filter((season: Season) => season.episodeCount > 0);
         if(this.seasons[0].number === 0) {
@@ -48,7 +50,10 @@ class Tvshow {
             this.lastAirDate = this.lastEpisodeToAir.airDate || this.lastAirDate;
             this.lastEpisodeToAir.seasonNumber === (this.seasons.length - 1) && (this.seasons[this.seasons.length - 1].episodeCount = this.lastEpisodeToAir.number);
         }
-        this.nextEpisodeToAir = data.next_episode_to_air ? new Episode(data.next_episode_to_air) : null;  
+        this.nextEpisodeToAir = data.next_episode_to_air ? new Episode(data.next_episode_to_air) : null;
+
+        const contentRating = data?.content_ratings?.results?.find(result => result.iso_3166_1 === Certification.certificationRegion)?.rating;
+        this.certification = Certification.reverseMapCertification(contentRating, false);
     }
 }
 
