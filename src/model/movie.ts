@@ -1,10 +1,8 @@
-import format from 'date-format';
 import constants from '../utils/constants';
 import Trailer from './trailer';
 
 class Movie {
     id: string;
-    imdbId: string;
     collectionId: string;
     title: string;
     language: string;
@@ -24,9 +22,8 @@ class Movie {
     hasTrailer: boolean;
     trailer: Trailer;
 
-    constructor(data: any, trailers: Trailer[] = [])  {
+    constructor(data: any)  {
         this.id = data.id;
-        this.imdbId = data.imdb_id;
         this.collectionId = data.belongs_to_collection?.id;
         this.title = data.title;
         this.language = data.original_language;
@@ -41,7 +38,7 @@ class Movie {
         this.genres = data.geners;
         this.runtime = data.runtime;
         this.tagline = data.tagline;
-        this.videos = trailers.filter((video) => video.official && (video.type === "Trailer" || video.type === "Featurette"));
+        this.videos = data.videos?.results?.map(video => new Trailer(video)).filter((video) => video.official && (video.type === "Trailer" || video.type === "Featurette"));
         
         let latestTrailer = this.videos.find((video) => video.type === "Trailer" && video.url);
         if(latestTrailer){

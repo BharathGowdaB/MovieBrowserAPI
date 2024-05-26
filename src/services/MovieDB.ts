@@ -1,10 +1,8 @@
 import axios from 'axios';
 import constants from "../utils/constants";
-import utils from '../utils/utils';
 import Movie from '../model/movie';
 import Vidsrc from './Vidsrc';
 import Certification, { CertificationType } from './Certification';
-import Trailer from '../model/trailer';
 import Collection from '../model/collection';
 
 const MovieDB = {
@@ -12,11 +10,10 @@ const MovieDB = {
     APIKEY: "api_key=c7bbab9fe9f49e2b47a570c1b6c591fb",
 
     getMovieDetails: async (id: string) => {
-        const url = MovieDB.BASEURL + "movie/" + id + "?append_to_response=,videos,images&" + MovieDB.APIKEY + constants.LANGUAGE;
+        const url = MovieDB.BASEURL + "movie/" + id + "?append_to_response=,videos,images,recommendations&" + MovieDB.APIKEY + constants.LANGUAGE;
         const response = await axios.get(url);
 
-        const trailers = response.data.videos?.results?.map(video => new Trailer(video));
-        return new Movie(response.data, trailers);
+        return new Movie(response.data);
     },
 
     getMovieById: async (id: string) => {
@@ -87,7 +84,7 @@ const MovieDB = {
             }))
 
             await Promise.all(movieData.map(async (movie) => {
-                const streamAvailable = await Vidsrc.checkForMovie(movie.imdbId);
+                const streamAvailable = await Vidsrc.checkForMovie(movie.id);
                 movie.streamAvailable = streamAvailable;
             }))
             response.results = movieData;

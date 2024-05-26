@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.0",
-    "date-format": "^4.0.14",
     "express": "^4.19.2",
     "serverless-http": "^3.2.0"
   },

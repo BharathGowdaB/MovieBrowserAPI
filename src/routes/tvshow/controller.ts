@@ -1,21 +1,22 @@
-import MovieDB from '../../services/MovieDB';
+import TvshowDB from '../../services/TvshowDB';
 import Vidsrc from '../../services/Vidsrc';
 
 const controller = {
-    getMovieById: async (req, res) => {
+    getTvshowById: async (req, res) => {
         try {
-            const { movieId } = req.params;
-            const response = await MovieDB.getMovieById(movieId);
+            const { tvshowId } = req.params;
+            const response = await TvshowDB.getTvshowById(tvshowId);
             res.send(response);
         } catch (error) {
             console.log(error);
             res.status(500).send("Internal Server Error");
         }
     },
-    getPopularMovies: async (req, res) => {
+    
+    getPopularTvshow: async (req, res) => {
         try {
             const { page, offset, count, certification = "NR" } = req.query;
-            const response = await MovieDB.getPopularMovies(certification, page, offset, count);
+            const response = await TvshowDB.getPopularTvshow(certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
@@ -23,10 +24,10 @@ const controller = {
         }
     },
 
-    getUpcomingMovies: async (req, res) => {
+    getUpcomingTvshow: async (req, res) => {
         try {
             const { page, offset, count, certification = "NR" } = req.query;
-            const response = await MovieDB.getUpcomingMovies(certification, page, offset, count);
+            const response = await TvshowDB.getUpcomingTvshow(certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
@@ -34,10 +35,10 @@ const controller = {
         }
     },
 
-    getTopRatedMovies: async (req, res) => {
+    getTopRatedTvshow: async (req, res) => {
         try {
             const { page, offset, count, certification = "NR" } = req.query;
-            const response = await MovieDB.getTopRatedMovies(certification, page, offset, count);
+            const response = await TvshowDB.getTopRatedTvshow(certification, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
@@ -45,20 +46,20 @@ const controller = {
         }
     },
 
-    getNewlyAddedMovies: async (req, res) => {
+    getNewlyAddedTvshow: async (req, res) => {
         try {
             const { page, offset, count } = req.query;
-            const response = await Vidsrc.getNewlyAddedMovies(page, offset, count);
+            const response = await Vidsrc.getNewlyAddedTvshows(page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
             res.status(500).send("Internal Server Error");
         }
     },
-    searchMovies: async (req, res) => {
+    searchTvshow: async (req, res) => {
         try {
             const { query, page, offset, count } = req.query;
-            const response = await MovieDB.searchMovie(query, page, offset, count);
+            const response = await TvshowDB.searchTvshow(query, page, offset, count);
             res.send(response);
         } catch (error) {
             console.log(error);
