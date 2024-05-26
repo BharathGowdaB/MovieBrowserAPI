@@ -18,6 +18,7 @@ const TvshowDB = {
         } catch(error){
             if(error?.response?.status === 404){
                 throw {
+                    id,
                     status: 404,
                     statusText: 'Not Found'
                 };
@@ -66,7 +67,7 @@ const TvshowDB = {
         const queryParam = `&sort_by=popularity.desc&vote_count.gte=10&vote_average.lte=10&air_date.lte=${date}${constants.LANGUAGE}`;
         const certificationQuery = Certification.getCertificationQuery(certification, false);
 
-        const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery;
+        const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery + "&";
         return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
     },
 
@@ -76,7 +77,7 @@ const TvshowDB = {
         const queryParam = `&sort_by=popularity.desc&air_date.gte=${startDate}&air_date.lte=${endDate}${constants.LANGUAGE}`;
         const certificationQuery = Certification.getCertificationQuery(certification, false);
         
-        const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery;
+        const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery + "&";
         return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
     },
 
@@ -84,7 +85,7 @@ const TvshowDB = {
         const queryParam = `&sort_by=vote_average.desc&vote_count.gte=200&vote_average.lte=10${constants.LANGUAGE}`;
         const certificationQuery = Certification.getCertificationQuery(certification, false);
         
-        const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery;
+        const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery + "&";
         return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
     },
 
@@ -92,7 +93,7 @@ const TvshowDB = {
         const queryParam = `&query=${query}`;
         const certificationOrder = Certification.getCertificationOrder(certification);
 
-        const url = TvshowDB.BASEURL + "search/tv?" + TvshowDB.APIKEY + queryParam;
+        const url = TvshowDB.BASEURL + "search/tv?" + TvshowDB.APIKEY + queryParam + "&";
         return await Utils.getList(url, page, offset, count, async (item) => {
             try{
                 const tvshow = await TvshowDB.getTvshowDetails(item?.id);
