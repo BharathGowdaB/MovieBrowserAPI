@@ -30,7 +30,7 @@ const MovieDB = {
     },
 
     getMovieById: async (id: string) => {
-        const movie = await MovieDB.getMovieDetails(id);
+        const movie = await MovieDB.getListCallback({ id });
 
         const [collection, recommendations] = await Promise.all([movie.collectionId && MovieDB.getMovieCollection(movie.collectionId), MovieDB.getMovieRecommendation(movie.id)]);
 

@@ -29,7 +29,7 @@ const TvshowDB = {
     },
 
     getTvshowById: async (id: string) => {
-        const tvshow = await TvshowDB.getTvshowDetails(id);
+        const tvshow = await TvshowDB.getListCallback({ id });
         const recommendations = await  TvshowDB.getTvshowRecommendation(tvshow.id);
 
         return {
