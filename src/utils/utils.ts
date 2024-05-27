@@ -1,20 +1,21 @@
 import axios from "axios";
 
 const utils = {
-    getList: async (url: string, curPage: number = 1, curOffset: number = 0, count: number = 20, itemCallback = (x: any) => x) => {
+    getList: async (url: string, curPage: number = 1, curOffset: number = 0, count: number = 25, itemCallback = (x: any) => x) => {
         curPage = Number(curPage);
         curOffset = Number(curOffset);
         count = Number(count);
 
         const results = [];
         const promiseCallback = [];
+        const maxPageTraversal = Math.ceil((count * 3) / 15);
 
         async function getData(){
             const getDataPromise = [];
-            for(let i = curPage; i < curPage + 4; i++){
+            for(let i = curPage; i < curPage + maxPageTraversal ; i++){
                 getDataPromise.push(axios.get(`${url}${i}`, { params : { page: i}}))
             }
-            const dataRespArray = await Promise.all(getDataPromise);
+            const dataRespArray = (await Promise.all(getDataPromise));
             const data = [];
             dataRespArray.forEach((res, page) => {
                 const items = res.data?.result?.items || res?.data?.results;
@@ -35,13 +36,13 @@ const utils = {
         }
 
         async function awaitCallbackPromise(){
-            const callbackResps = await Promise.all(promiseCallback.map(f => f()));
-            for(let i = 0 ; i < callbackResps.length; i++){
-                if(callbackResps[i] && callbackResps[i].model && results.length < count){
-                    results.push(callbackResps[i].model);
+            for(let i = 0 ; i < promiseCallback.length; i++){
+                const response = await promiseCallback[i];
+                if(response && response.model && results.length < count){
+                    results.push(response.model);
                     if(results.length === count){
-                        curOffset = callbackResps[i].nextOffset;
-                        curPage = callbackResps[i].nextPage;
+                        curOffset = response.nextOffset;
+                        curPage = response.nextPage;
                         break;
                     }
                 }
@@ -55,16 +56,16 @@ const utils = {
                 break;
             } else {
                 data.forEach((itemData) => {
-                    promiseCallback.push(async () => {
+                    promiseCallback.push((async () => {
                         const model = await itemCallback(itemData.item)
                         return {
                             ...itemData,
                             model: model
                         }
-                    });
+                    })());
                 })
-                curPage += 4;
-    
+                curPage += maxPageTraversal;
+            
                 await awaitCallbackPromise();
             }
         }

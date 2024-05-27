@@ -89,24 +89,11 @@ const TvshowDB = {
         return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
     },
 
-    searchTvshow: async (query: string, certification: CertificationType, page: number, offset: number, count: number) => {
+    searchTvshow: async (query: string, page: number, offset: number, count: number) => {
         const queryParam = `&query=${query}`;
-        const certificationOrder = Certification.getCertificationOrder(certification);
 
         const url = TvshowDB.BASEURL + "search/tv?" + TvshowDB.APIKEY + queryParam + "&";
-        return await Utils.getList(url, page, offset, count, async (item) => {
-            try{
-                const tvshow = await TvshowDB.getTvshowDetails(item?.id);
-                if(certificationOrder <= Certification.getCertificationOrder(tvshow.certification)){
-                    const [streamFirstEpisode, streamLastEpisode] = await Promise.all([Vidsrc.checkForTvshow(tvshow.id, 1, 1), Vidsrc.checkForTvshow(tvshow.id, tvshow.seasons.length, tvshow.seasons[tvshow.seasons.length - 1].episodeCount - 1)]);
-                    tvshow.streamFirstEpisode = streamFirstEpisode;
-                    tvshow.streamLastEpisode = streamLastEpisode;
-                    return tvshow;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        });
+        return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
     }
 }
 
