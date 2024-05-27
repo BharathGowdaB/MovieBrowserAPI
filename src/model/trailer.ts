@@ -1,6 +1,7 @@
 class Trailer {
     id: string;
     key: string;
+    name: string;
     url: string;
     type: string;
     official: boolean;
@@ -10,6 +11,7 @@ class Trailer {
     constructor(data: any){
         this.id = data.id;
         this.key = data.key;
+        this.name = data.name;
         this.url = data.site === "YouTube" ? ("https://www.youtube.com/watch?v=" + data.key) : null;
         this.type = data.type;
         this.official = data.official;

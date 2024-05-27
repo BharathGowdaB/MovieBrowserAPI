@@ -7,7 +7,7 @@ env:
 phases:
   install:
     commands:
-      - npm install -g serverless
+      - npm install -g serverless@3.38
       - npm install
 
   # pre_build:

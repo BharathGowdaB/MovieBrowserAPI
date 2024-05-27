@@ -63,7 +63,7 @@ class Movie {
                 curRating = cert;
             }
             return curRating;
-        }, "NR");
+        }, "NR") || "NR";
     }
 }
 
