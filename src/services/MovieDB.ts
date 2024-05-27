@@ -102,22 +102,11 @@ const MovieDB = {
         return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
     },
 
-    searchMovie: async (query: string, certification: CertificationType, page: number, offset: number, count: number) => {
+    searchMovie: async (query: string, page: number, offset: number, count: number) => {
         const queryParam = `&query=${query}`;
-        const certificationOrder = Certification.getCertificationOrder(certification);
 
         const url = MovieDB.BASEURL + "search/movie?" + MovieDB.APIKEY + queryParam + "&";
-        return await Utils.getList(url, page, offset, count,  async (item) => {
-            try{
-                const movieModel = await MovieDB.getMovieDetails(item?.id);
-                if(certificationOrder <= Certification.getCertificationOrder(movieModel.certification)){
-                    movieModel.streamAvailable = true;
-                    return movieModel;
-                }
-            } catch (error){
-                console.log(error);
-            } 
-        });
+        return await Utils.getList(url, page, offset, count,  MovieDB.getListCallback);
     }
 }
 
