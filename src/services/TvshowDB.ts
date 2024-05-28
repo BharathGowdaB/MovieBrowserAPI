@@ -29,7 +29,7 @@ const TvshowDB = {
     },
 
     getTvshowById: async (id: string) => {
-        const tvshow = await TvshowDB.getListCallback({ id });
+        const tvshow = await TvshowDB.getTvshowCallback({ id });
         const recommendations = await  TvshowDB.getTvshowRecommendation(tvshow.id);
 
         return {
@@ -44,13 +44,13 @@ const TvshowDB = {
 
         let tvshowData = [];
         if(res.data?.results?.length) {
-            tvshowData = await Promise.all(res.data.results.map(tvshow => TvshowDB.getTvshowDetails(tvshow.id)));
+            tvshowData = await Promise.all(res.data.results.map(tvshow => TvshowDB.getTvshowCallback(tvshow)));
         }
 
         return tvshowData;
     },
 
-    getListCallback: async (item) => {
+    getTvshowCallback: async (item) => {
         try{
             const tvshow = await TvshowDB.getTvshowDetails(item?.id);
             const [streamFirstEpisode, streamLastEpisode] = await Promise.all([Vidsrc.checkForTvshow(tvshow.id, 1, 1), Vidsrc.checkForTvshow(tvshow.id, tvshow.seasons.length, tvshow.seasons[tvshow.seasons.length - 1].episodeCount - 1)]);
@@ -68,7 +68,7 @@ const TvshowDB = {
         const certificationQuery = Certification.getCertificationQuery(certification, false);
 
         const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery + "&";
-        return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, TvshowDB.getTvshowCallback);
     },
 
     getUpcomingTvshow: async (certification: CertificationType, page: number, offset: number, count: number) => {
@@ -78,7 +78,7 @@ const TvshowDB = {
         const certificationQuery = Certification.getCertificationQuery(certification, false);
         
         const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery + "&";
-        return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, TvshowDB.getTvshowCallback);
     },
 
     getTopRatedTvshow: async (certification: CertificationType, page: number, offset: number, count: number) => {
@@ -86,14 +86,14 @@ const TvshowDB = {
         const certificationQuery = Certification.getCertificationQuery(certification, false);
         
         const url = TvshowDB.BASEURL + "discover/tv?" + TvshowDB.APIKEY + queryParam + certificationQuery + "&";
-        return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, TvshowDB.getTvshowCallback);
     },
 
     searchTvshow: async (query: string, page: number, offset: number, count: number) => {
         const queryParam = `&query=${query}`;
 
         const url = TvshowDB.BASEURL + "search/tv?" + TvshowDB.APIKEY + queryParam + "&";
-        return await Utils.getList(url, page, offset, count, TvshowDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, TvshowDB.getTvshowCallback);
     }
 }
 

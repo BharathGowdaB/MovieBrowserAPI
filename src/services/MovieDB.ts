@@ -30,7 +30,7 @@ const MovieDB = {
     },
 
     getMovieById: async (id: string) => {
-        const movie = await MovieDB.getListCallback({ id });
+        const movie = await MovieDB.getMovieCallback({ id });
 
         const [collection, recommendations] = await Promise.all([movie.collectionId && MovieDB.getMovieCollection(movie.collectionId), MovieDB.getMovieRecommendation(movie.id)]);
 
@@ -47,7 +47,7 @@ const MovieDB = {
 
         let movieData = [];
         if(res.data?.parts?.length) {
-            movieData = await Promise.all(res.data.parts.map(movie => MovieDB.getMovieDetails(movie.id)));
+            movieData = await Promise.all(res.data.parts.map(movie => MovieDB.getMovieCallback(movie)));
         }
 
         return new Collection(res.data, movieData);
@@ -59,13 +59,13 @@ const MovieDB = {
 
         let movieData = [];
         if(res.data?.results?.length) {
-            movieData = await Promise.all(res.data.results.map(movie => MovieDB.getMovieDetails(movie.id)));
+            movieData = await Promise.all(res.data.results.map(movie => MovieDB.getMovieCallback(movie)));
         }
 
         return movieData;
     },
 
-    getListCallback: async (item) => {
+    getMovieCallback: async (item) => {
         try{
             const [movieData, streamAvailable] = await Promise.all([MovieDB.getMovieDetails(item?.id), Vidsrc.checkForMovie(item?.id)]);
             movieData.streamAvailable = streamAvailable;
@@ -81,7 +81,7 @@ const MovieDB = {
         const certificationQuery = Certification.getCertificationQuery(certification, true);
 
         const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery + "&";
-        return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, MovieDB.getMovieCallback);
     },
 
     getUpcomingMovies: async (certification: CertificationType, page: number, offset: number, count: number) => {
@@ -91,7 +91,7 @@ const MovieDB = {
         const certificationQuery = Certification.getCertificationQuery(certification, true);
         
         const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery + "&";
-        return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, MovieDB.getMovieCallback);
     },
 
     getTopRatedMovies: async (certification: CertificationType, page: number, offset: number, count: number) => {
@@ -99,14 +99,14 @@ const MovieDB = {
         const certificationQuery = Certification.getCertificationQuery(certification, true);
         
         const url = MovieDB.BASEURL + "discover/movie?" + MovieDB.APIKEY + queryParam + certificationQuery + "&";
-        return await Utils.getList(url, page, offset, count, MovieDB.getListCallback);
+        return await Utils.getList(url, page, offset, count, MovieDB.getMovieCallback);
     },
 
     searchMovie: async (query: string, page: number, offset: number, count: number) => {
         const queryParam = `&query=${query}`;
 
         const url = MovieDB.BASEURL + "search/movie?" + MovieDB.APIKEY + queryParam + "&";
-        return await Utils.getList(url, page, offset, count,  MovieDB.getListCallback);
+        return await Utils.getList(url, page, offset, count,  MovieDB.getMovieCallback);
     }
 }
 
